@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Together All Prosper</title>
+<meta name="description" content="Together All Prosper is a trading dojo: one-to-one mentorship and live market calls, taught through reps and correction. Education only.">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Petit+Formal+Script&family=Manrope:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Brand tokens: together-all-prosper-brand skill, visual-identity.md */
+  :root{
+    --espresso:#14100C;   /* page ground */
+    --wood:#241A12;       /* raised surfaces */
+    --walnut:#3A2A1C;     /* rules, borders */
+    --leather:#5A422C;    /* hover warmth */
+    --gold:#C9A227;       /* the constant accent */
+    --chandelier:#E5C96A; /* lit gold: hover, focus */
+    --cream:#F6EFE3;      /* headings */
+    --parchment:#C6B49A;  /* body copy */
+    --hairline:rgba(201,162,39,0.20);
+
+    /* spacing tokens */
+    --s1:8px; --s2:16px; --s3:24px; --s4:40px; --s5:64px; --s6:112px;
+    --gutter:clamp(16px, 6vw, 96px);
+    --spring:cubic-bezier(.16,.84,.44,1);
+
+    /* depth: base, elevated, floating */
+    --shadow-elevated:0 1px 0 rgba(229,201,106,0.06) inset, 0 12px 28px -14px rgba(10,6,2,0.7), 0 2px 6px -2px rgba(201,162,39,0.08);
+    --shadow-floating:0 24px 60px -24px rgba(10,6,2,0.85), 0 8px 24px -10px rgba(201,162,39,0.18);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--espresso);
+    color:var(--parchment);
+    font-family:'Manrope',sans-serif;
+    font-weight:300;
+    font-size:1rem;
+    line-height:1.7;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--gold);color:var(--espresso);}
+  img{max-width:100%;display:block;}
+  a{color:inherit;text-decoration:none;}
+
+  .display{font-family:'Cormorant Garamond',serif;color:var(--cream);font-weight:500;letter-spacing:-0.02em;}
+  .script{font-family:'Petit Formal Script',cursive;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:0.7rem;letter-spacing:0.28em;
+    text-transform:uppercase;color:var(--gold);display:inline-block;margin-bottom:var(--s2);
+  }
+
+  /* grain */
+  .grain{
+    position:fixed;inset:0;pointer-events:none;z-index:50;opacity:0.04;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* focus + buttons */
+  :focus-visible{outline:2px solid var(--chandelier);outline-offset:4px;border-radius:2px;}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    padding:15px 32px;font-size:0.8rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;
+    border:1px solid var(--gold);
+    transition:transform .45s var(--spring), opacity .3s ease, background-color .3s ease, color .3s ease;
+  }
+  .btn-primary{background:var(--gold);color:var(--espresso);box-shadow:var(--shadow-elevated);}
+  .btn-primary:hover{background:var(--chandelier);border-color:var(--chandelier);transform:translateY(-2px);}
+  .btn-primary:active{transform:translateY(0) scale(0.98);}
+  .btn-ghost{color:var(--cream);background:transparent;border-color:var(--hairline);}
+  .btn-ghost:hover{border-color:var(--gold);color:var(--chandelier);transform:translateY(-2px);}
+  .btn-ghost:active{transform:translateY(0) scale(0.98);}
+
+  /* nav */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:40;
+    display:flex;align-items:center;justify-content:space-between;gap:var(--s2);
+    padding:var(--s2) var(--gutter);
+    background:linear-gradient(to bottom, rgba(20,16,12,0.94), rgba(20,16,12,0.7));
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--hairline);
+  }
+  .brand{display:flex;align-items:center;gap:12px;min-width:0;}
+  .brand img{width:34px;height:auto;flex-shrink:0;}
+  .brand-copy{display:flex;flex-direction:column;line-height:1.15;min-width:0;}
+  .brand-name{font-family:'Petit Formal Script',cursive;font-size:1.3rem;color:var(--cream);white-space:nowrap;}
+  .brand-tag{font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);}
+  .nav-links{display:flex;gap:var(--s4);font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;}
+  .nav-links a{position:relative;padding:4px 0;transition:color .3s ease;}
+  .nav-links a::after{
+    content:'';position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--gold);
+    transform:scaleX(0);transform-origin:left;transition:transform .45s var(--spring);
+  }
+  .nav-links a:hover{color:var(--chandelier);}
+  .nav-links a:hover::after{transform:scaleX(1);}
+  .nav-links a:active{opacity:0.7;}
+  nav .btn{padding:10px 20px;font-size:0.72rem;white-space:nowrap;flex-shrink:0;}
+
+  /* hero */
+  .hero{
+    position:relative;min-height:100vh;min-height:100svh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    padding:calc(var(--s6) + 20px) var(--gutter) var(--s5);
+    overflow:hidden;
+    background:
+      radial-gradient(ellipse 70% 50% at 50% 8%, rgba(229,201,106,0.13), transparent 62%),
+      radial-gradient(ellipse 60% 45% at 15% 90%, rgba(90,66,44,0.45), transparent 70%),
+      radial-gradient(ellipse 55% 40% at 88% 75%, rgba(58,42,28,0.55), transparent 70%),
+      var(--espresso);
+  }
+  .hero-crest{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-48%);
+    width:min(520px, 78vw);opacity:0.13;pointer-events:none;
+  }
+  .hero-arches{position:absolute;inset:0;width:100%;height:100%;opacity:0.35;pointer-events:none;}
+  .hero > *:not(.hero-crest):not(.hero-arches){position:relative;}
+  .hero h1{font-size:clamp(2.9rem, 8.5vw, 6.2rem);line-height:1.02;letter-spacing:-0.03em;}
+  .hero h1 .prosper{
+    display:block;font-family:'Petit Formal Script',cursive;font-weight:400;letter-spacing:0;
+    color:var(--chandelier);font-size:clamp(3.4rem, 11vw, 8rem);line-height:1.05;margin-top:var(--s1);
+  }
+  .hero-lead{max-width:620px;margin:var(--s4) auto 0;font-size:1.08rem;}
+  .hero-lead em{display:block;margin-top:var(--s2);font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--chandelier);}
+  .hero-ctas{margin-top:var(--s4);display:flex;flex-wrap:wrap;gap:var(--s2);justify-content:center;}
+
+  /* sections */
+  section{padding:var(--s6) var(--gutter);position:relative;}
+  .wrap{max-width:1140px;margin:0 auto;}
+  .head{max-width:680px;margin:0 auto var(--s5);text-align:center;}
+  .head h2{font-size:clamp(2rem,4vw,3.1rem);line-height:1.15;letter-spacing:-0.03em;}
+  .head p{margin-top:var(--s3);font-size:1.04rem;}
+  .band{background:var(--wood);border-top:1px solid var(--hairline);border-bottom:1px solid var(--hairline);}
+
+  /* about */
+  .split{display:grid;grid-template-columns:1.1fr 0.9fr;gap:var(--s5);align-items:start;}
+  .split h2{font-size:clamp(2rem,3.6vw,2.8rem);line-height:1.2;letter-spacing:-0.03em;margin-bottom:var(--s3);}
+  .split p{margin-bottom:var(--s2);}
+  .quote{
+    font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1.4rem,2.6vw,1.9rem);
+    line-height:1.45;color:var(--cream);border-left:1px solid var(--gold);padding-left:var(--s3);margin:var(--s4) 0;
+  }
+  .founder{
+    background:var(--wood);border:1px solid var(--walnut);padding:var(--s4);box-shadow:var(--shadow-floating);
+  }
+  .founder h3{font-size:1.9rem;margin-bottom:4px;}
+  .founder .handle{font-family:'JetBrains Mono',monospace;font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);}
+  .founder ul{list-style:none;margin-top:var(--s3);}
+  .founder li{padding:12px 0;border-top:1px solid var(--walnut);font-size:0.96rem;}
+  .founder li strong{color:var(--cream);font-weight:500;}
+
+  /* offer cards */
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--s3);max-width:860px;margin:0 auto;}
+  .card{
+    background:var(--espresso);border:1px solid var(--walnut);padding:var(--s4) var(--s4) var(--s4);
+    box-shadow:var(--shadow-elevated);
+    transition:transform .5s var(--spring), border-color .3s ease;
+    display:flex;flex-direction:column;
+  }
+  .card:hover{transform:translateY(-4px);border-color:var(--leather);}
+  .card .num{font-family:'JetBrains Mono',monospace;font-size:0.7rem;letter-spacing:0.2em;color:var(--gold);}
+  .card h3{font-size:1.75rem;line-height:1.2;margin:var(--s2) 0 var(--s2);}
+  .card p{font-size:0.97rem;}
+  .card ul{list-style:none;margin-top:var(--s3);font-size:0.92rem;}
+  .card li{padding:8px 0 8px 18px;position:relative;border-top:1px solid var(--walnut);}
+  .card li::before{content:'';position:absolute;left:0;top:18px;width:6px;height:6px;background:var(--gold);transform:rotate(45deg);}
+  .card .tag{margin-top:auto;padding-top:var(--s3);font-family:'JetBrains Mono',monospace;font-size:0.66rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--parchment);opacity:0.8;}
+  .note{text-align:center;margin-top:var(--s4);font-size:0.92rem;}
+  .note strong{color:var(--cream);font-weight:500;}
+
+  /* tenets */
+  .tenets{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--hairline);border:1px solid var(--hairline);}
+  .tenet{background:var(--wood);padding:var(--s4) var(--s3);text-align:center;}
+  .tenet .n{font-family:'JetBrains Mono',monospace;font-size:0.66rem;letter-spacing:0.2em;color:var(--gold);}
+  .tenet h3{font-size:1.6rem;margin-top:var(--s1);}
+  .saying{text-align:center;margin-top:var(--s5);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.35rem;color:var(--cream);}
+
+  /* contact */
+  .contact{text-align:center;
+    background:
+      radial-gradient(ellipse 60% 60% at 50% 0%, rgba(229,201,106,0.10), transparent 65%),
+      var(--espresso);
+  }
+  .contact h2{font-size:clamp(2.2rem,5vw,3.8rem);letter-spacing:-0.03em;}
+  .contact .script{display:block;color:var(--chandelier);font-size:clamp(2.2rem,6vw,4.2rem);margin:var(--s1) 0 var(--s4);}
+  .contact p{max-width:540px;margin:0 auto var(--s4);}
+  .contact-line{margin-top:var(--s3);font-family:'JetBrains Mono',monospace;font-size:0.8rem;letter-spacing:0.06em;}
+  .contact-line a{color:var(--chandelier);border-bottom:1px solid var(--hairline);transition:border-color .3s ease, color .3s ease;}
+  .contact-line a:hover{border-color:var(--chandelier);color:var(--cream);}
+  .contact-line a:active{opacity:0.7;}
+
+  /* disclaimer + footer */
+  footer .risk{
+    flex-basis:100%;max-width:760px;margin:var(--s2) auto 0;text-align:center;
+    font-family:'Manrope',sans-serif;font-size:0.75rem;line-height:1.6;letter-spacing:0;opacity:0.7;
+  }
+  footer{
+    padding:var(--s4) var(--gutter);border-top:1px solid var(--walnut);
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--s2);
+    font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:0.06em;
+  }
+  footer .brand img{width:28px;}
+
+  /* reveal: transform + opacity only */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .9s ease, transform 1s var(--spring);}
+  .reveal.in{opacity:1;transform:none;}
+
+  @media (max-width:900px){
+    .nav-links{display:none;}
+    .split{grid-template-columns:1fr;}
+    .cards{grid-template-columns:1fr;}
+    .tenets{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:520px){
+    :root{--s6:80px;--s5:48px;}
+    .brand-tag{display:none;}
+    .brand-name{font-size:1.1rem;}
+    .tenets{grid-template-columns:1fr;}
+    .founder,.card{padding:var(--s3);}
+    footer{justify-content:center;text-align:center;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    .reveal{opacity:1;transform:none;transition:none;}
+    .btn,.card,.nav-links a::after{transition:none;}
+  }
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<nav aria-label="Main">
+  <a href="#top" class="brand" aria-label="Together All Prosper, back to top">
+    <img src="crest.png" alt="">
+    <span class="brand-copy">
+      <span class="brand-name">Together All Prosper</span>
+      <span class="brand-tag">Tap Into Your Legacy</span>
+    </span>
+  </a>
+  <div class="nav-links">
+    <a href="#about">Who we are</a>
+    <a href="#teach">What we teach</a>
+    <a href="#code">Our code</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <a href="#contact" class="btn btn-primary">Tap In</a>
+</nav>
+
+<main id="top">
+<!-- HERO -->
+<section class="hero">
+  <svg class="hero-arches" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g stroke="#C9A227" stroke-width="0.6" fill="none" opacity="0.4">
+      <path d="M0 900 L0 220 Q160 80 320 220 L320 900"/>
+      <path d="M320 900 L320 220 Q480 80 640 220 L640 900"/>
+      <path d="M640 900 L640 220 Q800 80 960 220 L960 900"/>
+      <path d="M960 900 L960 220 Q1120 80 1280 220 L1280 900"/>
+      <path d="M1280 900 L1280 220 Q1440 80 1600 220 L1600 900"/>
+    </g>
+  </svg>
+  <img src="crest.png" alt="" class="hero-crest" aria-hidden="true">
+
+  <span class="eyebrow">A trading dojo</span>
+  <h1 class="display">Together All<span class="prosper">Prosper</span></h1>
+  <p class="hero-lead">
+    One-to-one mentorship and live market calls, taught the way a martial art is taught: one concept at a time, through reps and correction, not luck.
+    <em>Perfect practice makes perfect execution.</em>
+  </p>
+  <div class="hero-ctas">
+    <a href="#contact" class="btn btn-primary">Tap Into Your Legacy</a>
+    <a href="#teach" class="btn btn-ghost">What we teach</a>
+  </div>
+</section>
+
+<!-- WHO WE ARE -->
+<section id="about" class="band">
+  <div class="wrap split">
+    <div class="reveal">
+      <span class="eyebrow">Who we are</span>
+      <h2 class="display">The name came from the coaching, not a branding meeting.</h2>
+      <p>Together All Prosper started as an online group of independent traders. The message to that group never changed: focus, stay positive, lead the way, work together. Said often enough, it became the name.</p>
+      <p class="quote">Together, we all prosper.</p>
+      <p>Today it is a small, invite-only school. Each student trades their own account and makes their own decisions. What we share is the method, the practice and the room.</p>
+    </div>
+    <aside class="founder reveal" aria-label="Founder">
+      <span class="eyebrow">Founder</span>
+      <h3 class="display">Obly</h3>
+      <span class="handle">Trini-Trillionaire</span>
+      <ul>
+        <li><strong>20+ years</strong> teaching martial arts</li>
+        <li><strong>Law-enforcement</strong> background</li>
+        <li><strong>Self-taught trader</strong>: studied nearly every style for years, then built his own method, the Money Box System</li>
+        <li><strong>Teaching now</strong>: the course and the live room are running today</li>
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<!-- WHAT WE TEACH -->
+<section id="teach">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">What we teach</span>
+      <h2 class="display">Enter the dojo. Train toward the black belt.</h2>
+      <p>The black belt here is not a certificate. It is the competence itself: reading market structure and executing a plan without second-guessing it.</p>
+    </div>
+    <div class="cards">
+      <article class="card reveal">
+        <span class="num">01</span>
+        <h3 class="display">1:1 Mentorship</h3>
+        <p>Six private lessons on Zoom, taught one concept at a time on your own chart.</p>
+        <ul>
+          <li>Live, one-to-one, at your pace</li>
+          <li>Includes one month of the live calls</li>
+          <li>Questions answered on real charts</li>
+        </ul>
+        <span class="tag">By invitation</span>
+      </article>
+      <article class="card reveal">
+        <span class="num">02</span>
+        <h3 class="display">Live Calls</h3>
+        <p>Morning sessions on market days. We read the chart together, in real time, and review it after.</p>
+        <ul>
+          <li>Teaching, not signals</li>
+          <li>Every trade decision stays yours</li>
+          <li>A room that keeps you practicing. What you put in is what you get out.</li>
+        </ul>
+        <span class="tag">Monthly membership</span>
+      </article>
+    </div>
+    <p class="note reveal">Enrolment is <strong>by invitation</strong> for now. Reach out below and we will talk first.</p>
+  </div>
+</section>
+
+<!-- CODE -->
+<section id="code" class="band">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">Our code</span>
+      <h2 class="display">Four tenets from the dojo floor</h2>
+    </div>
+    <div class="tenets reveal">
+      <div class="tenet"><span class="n">I</span><h3 class="display">Courtesy</h3></div>
+      <div class="tenet"><span class="n">II</span><h3 class="display">Modesty</h3></div>
+      <div class="tenet"><span class="n">III</span><h3 class="display">Integrity</h3></div>
+      <div class="tenet"><span class="n">IV</span><h3 class="display">Indomitable Spirit</h3></div>
+    </div>
+    <p class="saying reveal">A master without a dojo is a master without borders. The whole world is the school.</p>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact">
+  <div class="reveal">
+    <h2 class="display">Come, let's</h2>
+    <span class="script">tap in.</span>
+    <p>A short conversation, no pressure. Tell us where you are in your trading and we will tell you honestly whether the room is the right fit.</p>
+    <a href="https://calendly.com/trini-trillionaire/1hr_live_mentorship" class="btn btn-primary" target="_blank" rel="noopener">Book a call</a>  </div>
+</section>
+</main>
+
+<footer>
+  <span class="brand">
+    <img src="crest.png" alt="">
+    <span>© 2026 Together All Prosper LLC</span>
+  </span>
+  <p class="risk">Education only, not financial advice. Trading involves substantial risk of loss and is not suitable for everyone. Past performance does not guarantee future results, and individual results vary.</p>
+</footer>
+
+<script>
+  const els = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    els.forEach(el => io.observe(el));
+  } else {
+    els.forEach(el => el.classList.add('in'));
+  }
+</script>
+</body>
+</html>
