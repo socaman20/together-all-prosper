@@ -354,7 +354,7 @@
     .contact{place-items:end center;text-align:center;padding-top:46vh;}
     .contact .inner{max-width:none;}
     .contact p{margin-left:auto !important;}
-    .contact-video{height:62%;object-position:82% 50%;}
+    .contact-video{height:62%;object-position:77% 50%;}
     .contact-shade{background:linear-gradient(to bottom, #0B0806 0%, transparent 14%, transparent 38%, rgba(10,7,5,0.92) 56%, #0A0705 62%);}
     .hero-shade{background:linear-gradient(to bottom, rgba(10,7,5,0.35) 0%, transparent 18%, transparent 36%, rgba(10,7,5,0.9) 54%, #0A0705 60%);}
     .hero{padding-top:55vh;align-items:start;}
@@ -556,7 +556,7 @@
 
 <!-- CONTACT -->
 <section id="contact" class="contact">
-  <video class="contact-video" muted loop playsinline preload="none" poster="hero-B-poster.jpg" data-src="hero-B.mp4" aria-hidden="true"></video>
+  <video class="contact-video" muted loop playsinline preload="none" poster="hero-A-poster.jpg" data-src="hero-A.mp4" aria-hidden="true"></video>
   <div class="contact-shade" aria-hidden="true"></div>
   <div class="inner reveal">
     <h2 class="display">Come, let's</h2>
@@ -627,12 +627,9 @@
     sc.style.setProperty("--py", ((r.top + r.height / 2 - innerHeight / 2) * -0.12) + "px");
   }), { passive: true });
 
-  /* hero: the Higgsfield scene (burning crest over the dojo pool). ?hero=b shows take B */
+  /* hero: the Higgsfield scene (burning crest over the dojo pool) */
   const hero = document.getElementById('hero');
   const hv = document.getElementById('heroVideo');
-  if (new URLSearchParams(location.search).get('hero') === 'b') {
-    hv.poster = 'hero-B-poster.jpg'; hv.querySelector('source').src = 'hero-B.mp4'; hv.load();
-  }
   if (calm) hv.playbackRate = 0.6;
   hv.play().catch(() => {});   /* only reached when motion is allowed: reduce-motion visitors keep the still poster */
   addEventListener('scroll', () => {
